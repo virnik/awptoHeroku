@@ -1,0 +1,46 @@
+Pobierz zadanie z repozytorium:
+https://github.com/lazarow/awpto-roulette-api-task
+
+1. Dodaj zależności projektu do pliku `pom.xml`:
+- spark-core,
+- slf4j-simple,
+- gson.
+Sprawdź działanie aplikacji wpisując w przeglądarce `localhost:8082`.
+
+2. Rozszerz fazę budowy o plugin `maven-compiler-plugin` i skonfiguruj wersje Javy dla źródeł oraz 
+plików docelowych.
+...
+<source>${jdk.version}</source>
+<target>${jdk.version}</target>
+...
+Na tym etapie wykonanie polecenia `mvn package` powinno wygenerować paczkę JAR w katalogu `target`.
+
+3. Kolejnym krokiem zadania jest dodanie pluginu `maven-assembly-plugin`, którego zadaniem jest przygotować
+tzw. tłustą wersje paczki JAR, zawierającą aplikacja oraz biblioteki. W tym celu dodaj plugin i skonfiguruj go.
+... <descriptorRef>jar-with-dependencies</descriptorRef> ...
+...
+<manifest>
+	<mainClass>Main</mainClass>
+</manifest>
+...
+... <goal>single</goal> ...
+
+4. Rozszerz konfigurację pluginu z poprzedniego punktu o wpis, który zmieni nazwę paczki JAR na `roulette-api.jar`.
+... 
+<finalName>roulette-api</finalName>
+<appendAssemblyId>false</appendAssemblyId>
+...
+
+5. W ostatnim kroku konfiguracji pliku `pom.xml` dodaj plugin `heroku-maven-plugin` wraz z konfiguracją
+nowo utworzonej aplikacji .
+https://github.com/heroku/heroku-maven-plugin
+
+6. Dodaj kod do nowego repozytorium na GitHub-ie.
+
+7. W Jenkins-ie stwórz zadanie, które pobierze repozytorium i wykona `deploy` do Heroku.
+HEROKU_API_KEY="xxx-xxx-xxxx" mvn heroku:deploy
+
+8. Sprawdź czy wdrożona aplikacja działa poprawnie.
+
+
+ 
